@@ -1,7 +1,7 @@
-# Blame Game
-# https://play.picoctf.org/events/73/challenges/challenge/405?category=5&page=1
+# Collaborative Development
+# https://play.picoctf.org/events/73/challenges/challenge/410?category=5&page=1
 
-import subprocess
+import subprocess, re
 
 def run_command(command):
     if isinstance(command, str):
@@ -16,6 +16,8 @@ run_command('../GitTools/Extractor/extractor.sh drop-in dumped-folder')
     
 output = run_command('find ./dumped-folder -type f -exec cat {} +').splitlines()
 
-flags = [x for x in output if 'picoCTF{' in x]
+clean = lambda x : x.replace('print(','').replace('"','').replace(')','').split(',')
 
-print(flags[1].split()[1])
+filtered = [clean(x) for x in output if 'print' in x]
+
+print(filtered[1][0]+filtered[-3][0]+filtered[-1][0])
